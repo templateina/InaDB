@@ -141,7 +141,7 @@
 
 
 .popup-content {
-  background: #fff;
+  background: linear-gradient(135deg, var(--background));
   padding: 20px;
   border-radius: 12px;
   width: 360px;
@@ -782,3 +782,4 @@ label {
 #toggleAutoplay:checked::before {
   transform: translateX(22px);
 }
+
