@@ -1,3 +1,5 @@
+/* iSAIAS NELSON ALBERTP */
+
 @media (max-width: 480px) {
   #search-input.search-box {
     width: 100%;            /* ocupa toda a largura do celular */
@@ -782,4 +784,5 @@ label {
 #toggleAutoplay:checked::before {
   transform: translateX(22px);
 }
+
 
