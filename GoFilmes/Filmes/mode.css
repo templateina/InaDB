@@ -1,0 +1,783 @@
+@media (max-width: 480px) {
+  #search-input.search-box {
+    width: 100%;            /* ocupa toda a largura do celular */
+    max-width: 100%;        /* nunca ultrapassa a tela */
+    box-sizing: border-box; /* padding + borda não aumentam largura */
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--background));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+.modal-content {
+  background: var(--sidebar-background);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.marker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.marker-item input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn-remove {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.btn-add {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+
+/* Oculta no celular (até 768px de largura) */
+@media (max-width: 768px) {
+  #voiceSearchBtnMobile,
+  #btn-shield {
+    display: none !important;
+  }
+}
+
+
+/* === POPUP BASE === */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+/* Estilo do span clicável */
+.profile-item span.copy-text {
+  display: inline-block;
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* Aviso de cópia */
+.profile-item span.copy-text::after {
+  content: "Copied!";
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 9999999;
+}
+
+/* Mostrar aviso */
+.profile-item span.copy-text.copied::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px); /* anima levemente para cima */
+}
+
+
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 360px;
+  max-width: 95%;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease-in-out;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.popup-content h2 {
+  margin-top: 0;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.popup-content label {
+  display: block;
+  margin: 8px 0 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+.popup-content input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.popup-content button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.popup-content button:hover {
+  background: #0056b3;
+}
+
+#login-status {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* === PERFIL === */
+#profile-popup p {
+  font-size: 14px;
+  margin: 6px 0;
+}
+#profile-popup span {
+  color: #007bff;
+  font-weight: 600;
+}
+#logout-btn {
+  background: #dc3545;
+}
+#logout-btn:hover {
+  background: #a71d2a;
+}
+/* Overlay com desfoque no fundo */
+.api-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px); /* Efeito de desfoque no fundo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999999; /* No topo de tudo */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+/* Mostrar popup */
+.api-popup[style*="flex"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Conteúdo do popup */
+.api-popup-content {
+background: linear-gradient(135deg, var(--background));
+  padding: 28px;
+  border-radius: 5px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.api-popup-content h3 {
+  margin-top: 0;
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Grid: 2 colunas em telas maiores, 1 em celular */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+.form-field input {
+  width: 100%;
+  background: #12121200;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 14px;
+  transition: border 0.2s;
+}
+
+.form-field input:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+}
+
+/* Botões */
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.buttons button {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+#cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+}
+
+#cancel-btn:hover {
+  background: #ccc;
+}
+
+#verify-btn {
+  background: #d4af37;
+  color: white;
+}
+
+#verify-btn:hover {
+  background: #c19d2d;
+}
+
+#activate-btn {
+  background: #4a90e2;
+  color: #000;
+}
+
+.eye-icon {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.eye-icon:hover {
+  opacity: 1;
+}
+
+#activate-btn:not(:disabled):hover {
+  background: #3a7bc8;
+}
+
+/* Responsivo: em telas menores, 1 coluna */
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .api-popup-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .buttons button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+.input-with-eye {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.input-with-eye input {
+  padding-right: 40px !important;
+  padding-left: 12px;
+}
+
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: auto;
+  opacity: 0.6;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.eye-icon:hover {
+  opacity: 1;
+}
+
+.input-with-eye.show-password .eye-icon {
+  color: #4a90e2;
+  opacity: 1;
+}
+  /* Estilo Netflix para o container de filtros */
+#filter-container {
+    display: none;
+    position: absolute;
+    top: 2px;
+    right: 0px; /* Ajustado para ficar mais à esquerda */
+    background: var(--text-genero);
+    padding: 17px;
+    border-radius: 4px;
+    z-index: 1000;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+    width: 272px;
+    font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  /* Estilo para os labels */
+  #filter-container label {
+    display: block;
+    color: var(--text-genero1);
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Estilo para os selects */
+  #filter-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: var(--header-background);
+    color: var(--text-genero1);
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+  }
+
+  /* Estilo para o botão */
+  #discoverButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+  }
+
+  #discoverButton:hover {
+    background-color: #f40612;
+  }
+
+  /* Efeito de foco nos selects */
+  #filter-container select:focus {
+    outline: none;
+    border-color: #e50914;
+    background-color: var(--header-background);
+  }
+  
+  /* Sidebar de notificações */
+.notification-sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 360px;
+  height: 100%;
+  background-color: var(--header-background);
+  color: white;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+  z-index: 10000;
+  transition: right 0.3s ease;
+}
+.notification-sidebar.active {
+  right: 0;
+}
+.notification-header {
+color: var(--text-genero1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0px;
+  padding: 10px;
+}
+.notification-header h3 {
+  font-size: 18px;
+  margin: 0;
+}
+#closeNotifications {
+  background: transparent;
+  border: none;
+  color: var(--text-genero1);
+  font-size: 24px;
+  cursor: pointer;
+}
+/* Estilo específico para o botão de fechar do sidebar de idiomas */
+#closeLanguages {
+  background: transparent;
+  border: none;
+  color: var(--text-genero1); /* Cor do texto (herdado do tema) */
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Efeito hover */
+#closeLanguages:hover {
+  color: #ff4444; /* Muda a cor ao passar o mouse */
+}
+
+
+#closeAutoplay {
+  background: transparent;
+  border: none;
+  color: var(--text-genero1); /* Cor do texto (herdado do tema) */
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Efeito hover */
+#closeAutoplay:hover {
+  color: #ff4444; /* Muda a cor ao passar o mouse */
+}
+
+
+.notification-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+}
+.notification-item img {
+  width: 60px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.notification-item .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.notification-item h4 {
+  font-size: 14px;
+  margin: 0;
+}
+.notification-item p {
+  font-size: 12px;
+  color: #ccc;
+  margin-top: 5px;
+}
+.notification-badge {
+  position: absolute;
+  top: 5px;
+  right: 48px;
+  background-color: red;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 6px;
+  font-size: 12px;
+  min-width: 18px;
+  text-align: center;
+}
+.notification-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+}
+
+
+/* NOVOS CSS 1 */
+
+ .notification-item {
+    cursor: pointer;
+    padding: 10px;
+    transition: background 0.3s, transform 0.4s;
+  }
+
+  .notification-item.active {
+background: var(--fundo-ios);
+    color: white;
+    border-radius: 6px;
+	margin-top: 15px;
+  }
+
+  .notification-item h4 {
+    margin: 0;
+  }
+
+  #applyBtn {
+    display: none;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #12cd22;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .slide-up {
+    animation: moveToTop 0.6s ease-in-out forwards;
+  }
+
+  @keyframes moveToTop {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+  }
+  
+#options {
+  background: var(--fundo-ios);
+  border-radius: 5px;
+  padding: 15px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  margin: auto;
+  color: var(--text-genero1);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.density-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  gap: 10px;
+}
+
+.density-option input[type="radio"] {
+  accent-color: #007bff;
+  margin-right: 6px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  cursor: pointer;
+}
+
+.play-text {
+  font-weight: 500;
+  color: var(--text-genero1);
+}
+
+.flag-icon {
+  width: 24px;
+  height: 18px;
+  border-radius: 3px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.input-number {
+  width: 80px;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+#error {
+  color: red;
+  font-size: 12px;
+  margin-top: 10px;
+  display: none;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  font-size: 12px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+/* Estilo base do switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    right: -110%;
+    top: -47%;
+
+/* Oculta o checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+/* Estilo toggle iOS */
+#toggleAutoplay {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 50px;
+  height: 28px;
+  margin-left: -10px;
+  background: #e50914;
+  border-radius: 28px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#toggleAutoplay:checked {
+  background: #4cd964; /* verde típico do iOS */
+}
+
+#toggleAutoplay::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+
+#toggleAutoplay:checked::before {
+  transform: translateX(22px);
+}
